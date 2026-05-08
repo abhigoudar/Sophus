@@ -64,6 +64,11 @@ using Matrix7 = Matrix<Scalar, 7, 7>;
 using Matrix7f = Matrix7<float>;
 using Matrix7d = Matrix7<double>;
 
+template <class Scalar>
+using Matrix10 = Matrix<Scalar, 10, 10>;
+using Matrix10f = Matrix10<float>;
+using Matrix10d = Matrix10<double>;
+
 template <class Scalar, int N, int Options = 0>
 using ParametrizedLine = Eigen::ParametrizedLine<Scalar, N, Options>;
 

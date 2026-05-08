@@ -9,6 +9,7 @@ set(TEST_SOURCES
     test_sim2
     test_so3
     test_se3
+    # test_sgal3
     test_rxso3
     test_sim3
     test_geometry)
