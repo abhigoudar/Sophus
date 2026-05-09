@@ -27,6 +27,11 @@ using Vector4f = Vector4<float>;
 using Vector4d = Vector4<double>;
 
 template <class Scalar>
+using Vector5 = Vector<Scalar, 5>;
+using Vector5f = Vector5<float>;
+using Vector5d = Vector5<double>;
+
+template <class Scalar>
 using Vector6 = Vector<Scalar, 6>;
 using Vector6f = Vector6<float>;
 using Vector6d = Vector6<double>;

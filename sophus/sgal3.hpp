@@ -122,6 +122,7 @@ namespace Sophus
         using TranslationType = typename Eigen::internal::traits<Derived>::TranslationType;
         using BoostType = typename Eigen::internal::traits<Derived>::BoostType;
         using TimestampType = typename Eigen::internal::traits<Derived>::TimestampType;
+        using EventType = Vector<Scalar, 4>;
         //
         static int constexpr MATRIX_SIZE = 5;
         //
@@ -210,6 +211,16 @@ namespace Sophus
             boost() = other.boost();
             timestamp() = other.timestamp();
             return *this;
+        }
+        /**
+         * 
+         */
+        EventType operator*(EventType const& p) const {
+            EventType pG;
+            pG.template head<3>() = rotation() * p.template head<3>() + 
+                boost() * p.template tail<1>() + translation();
+            pG.template tail<1>() = p.template tail<1>();
+            return pG;
         }
         /**
          * @brief Group composition (multiplication)
@@ -495,7 +506,7 @@ static std::ostream& operator<<(std::ostream& os, const Sophus::SGal3<Scalar>& G
     os << "\t Position:" << G.translation().transpose()
         << "\n\t Quaternion:" << G.rotation().unit_quaternion().coeffs().transpose()
         << "\n\t Boost:" << G.boost().transpose()
-        << "\n\t Time:" << G.timestamp(); 
+        << "\n\t Time:" << G.timestamp() << "\n"; 
     return os;
 }
 
