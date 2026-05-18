@@ -374,6 +374,16 @@ class SE3Base {
   ///
   SOPHUS_FUNC Matrix3<Scalar> rotationMatrix() const { return so3().matrix(); }
 
+  /// Alias mutator of SO3 group.
+  ///
+  SOPHUS_FUNC SO3Type& rotation() { return static_cast<Derived*>(this)->so3(); }
+
+  /// Alias accessor of SO3 group.
+  ///
+  SOPHUS_FUNC SO3Type const& rotation() const {
+    return static_cast<const Derived*>(this)->so3();
+  }
+
   /// Mutator of SO3 group.
   ///
   SOPHUS_FUNC SO3Type& so3() { return static_cast<Derived*>(this)->so3(); }

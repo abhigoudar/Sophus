@@ -385,7 +385,12 @@ namespace Sophus
         RotationType& rotation(){
             return rotation_;
         }
-
+        /**
+         * @brief set quaternion
+         */
+        SOPHUS_FUNC void setQuaternion(Eigen::Quaternion<Scalar> const& quat) {
+            rotation().setQuaternion(quat);
+        }
         /**
          * @brief non-mutable accessor of timestamp vector
          */
@@ -499,16 +504,6 @@ namespace Sophus
     };
     //
 } // namespace Sophus
-
-template<typename Scalar>
-static std::ostream& operator<<(std::ostream& os, const Sophus::SGal3<Scalar>& G)
-{
-    os << "\t Position:" << G.translation().transpose()
-        << "\n\t Quaternion:" << G.rotation().unit_quaternion().coeffs().transpose()
-        << "\n\t Boost:" << G.boost().transpose()
-        << "\n\t Time:" << G.timestamp() << "\n"; 
-    return os;
-}
 
 namespace Eigen
 {
