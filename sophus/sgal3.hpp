@@ -319,7 +319,8 @@ namespace Sophus
         SGal3(const Sophus::SO3<Scalar>& C_,
             const Eigen::Matrix<Scalar, 3, 1> p_,
             const Eigen::Matrix<Scalar, 3, 1> v_,
-            const Eigen::Matrix<Scalar, 1, 1> t_) : rotation_(C_),
+            const Eigen::Matrix<Scalar, 1, 1> t_) : 
+            rotation_(C_),
             translation_(p_),
             boost_(v_),
             timestamp_(t_){};
@@ -432,6 +433,37 @@ namespace Sophus
                     + (theta * theta + Scalar(2.0) * cos(theta) - Scalar(2.0)) / 
                         (Scalar(2.0) * pow(theta, 4)) * W_sq);
             }
+        }
+        /**
+         * 
+         */
+        static Eigen::Matrix3d boostJacobianN(
+            const Eigen::Vector3d& omega) {
+            double phi = omega.norm();
+            Eigen::Matrix3d I = Eigen::Matrix3d::Identity();
+
+            // Handle the singularity for small phi using Taylor expansion
+            if (phi < 1e-5) {
+                Eigen::Matrix3d omega_hat = Sophus::SO3d::hat(omega);
+                // N(w) = I + 1/3 * w^ + 1/12 * (w^)^2 + O(w^3)
+                return I + (1.0 / 3.0) * omega_hat + (1.0 / 12.0) * (omega_hat * omega_hat);
+            }
+
+            // Standard calculation for normal phi
+            Eigen::Vector3d a = omega / phi;                // Unit axis
+            Eigen::Matrix3d a_hat = Sophus::SO3d::hat(a);   // Skew-symmetric matrix of a
+
+            double phi_sq = phi * phi;
+            double cos_phi = std::cos(phi);
+            double sin_phi = std::sin(phi);
+
+            // Calculate the coefficients based on the formula
+            double c1 = 2.0 * (1.0 - cos_phi) / phi_sq;
+            double c2 = 1.0 - c1;
+            double c3 = 2.0 * (phi - sin_phi) / phi_sq;
+
+            // Construct the final matrix
+            return c1 * I + c2 * a * a.transpose() + c3 * a_hat;
         }
         /**
          * @brief Closed-form exponential map for SGal(3)
