@@ -680,4 +680,4 @@ namespace Eigen
         BoostType boost_;
         TimestampType timestamp_;
     };
-};
+}
