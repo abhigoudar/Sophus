@@ -180,6 +180,14 @@ namespace Sophus
             return static_cast<Derived*>(this)->timestamp();
         }
         /**
+         * @brief accessor for pose
+         */
+        Sophus::SE3<Scalar> const pose() const{
+            return Sophus::SE3<Scalar>(
+                rotation(),
+                translation());
+        }
+        /**
          * @brief returns SGal3 element as matrix
          * [C, v, r]
          * [0, 1, t]
