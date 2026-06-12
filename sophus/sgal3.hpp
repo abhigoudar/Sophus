@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include <sophus/so3.hpp>
+#include <sophus/se3.hpp>
 
 namespace Sophus
 {
@@ -342,7 +342,7 @@ namespace Sophus
             rotation_ = RotationType();
             translation_.setZero();
             boost_.setZero();
-            timestamp_ = Vector1<Scalar>(0.);
+            timestamp_ = Vector1<Scalar>(Scalar(0.));
         }
         /**
          * 
@@ -443,32 +443,36 @@ namespace Sophus
             }
         }
         /**
-         * 
+         * @brief Compute the left jacobian for boost element.
          */
-        static Eigen::Matrix3d boostJacobianN(
-            const Eigen::Vector3d& omega) {
-            double phi = omega.norm();
-            Eigen::Matrix3d I = Eigen::Matrix3d::Identity();
+        static Matrix3<Scalar> boostJacobianN(
+            const Vector3<Scalar>& omega) {
+            // 
+            using std::cos;
+            using std::sin;
+            //
+            Scalar phi = omega.norm();
+            Matrix3<Scalar> I = Matrix3<Scalar>::Identity();
 
             // Handle the singularity for small phi using Taylor expansion
             if (phi < 1e-5) {
-                Eigen::Matrix3d omega_hat = Sophus::SO3d::hat(omega);
+                Matrix3<Scalar> omega_hat = Sophus::SO3<Scalar>::hat(omega);
                 // N(w) = I + 1/3 * w^ + 1/12 * (w^)^2 + O(w^3)
                 return I + (1.0 / 3.0) * omega_hat + (1.0 / 12.0) * (omega_hat * omega_hat);
             }
 
             // Standard calculation for normal phi
-            Eigen::Vector3d a = omega / phi;                // Unit axis
-            Eigen::Matrix3d a_hat = Sophus::SO3d::hat(a);   // Skew-symmetric matrix of a
+            Vector3<Scalar> a = omega / phi;                // Unit axis
+            Matrix3<Scalar> a_hat = Sophus::SO3<Scalar>::hat(a);   // Skew-symmetric matrix of a
 
-            double phi_sq = phi * phi;
-            double cos_phi = std::cos(phi);
-            double sin_phi = std::sin(phi);
+            Scalar phi_sq = phi * phi;
+            Scalar cos_phi = cos(phi);
+            Scalar sin_phi = sin(phi);
 
             // Calculate the coefficients based on the formula
-            double c1 = 2.0 * (1.0 - cos_phi) / phi_sq;
-            double c2 = 1.0 - c1;
-            double c3 = 2.0 * (phi - sin_phi) / phi_sq;
+            Scalar c1 = 2.0 * (1.0 - cos_phi) / phi_sq;
+            Scalar c2 = 1.0 - c1;
+            Scalar c3 = 2.0 * (phi - sin_phi) / phi_sq;
 
             // Construct the final matrix
             return c1 * I + c2 * a * a.transpose() + c3 * a_hat;
