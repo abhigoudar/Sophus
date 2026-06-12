@@ -77,7 +77,7 @@ class Tests {
     SO3Type const C1 =
         SO3Type::exp(Vector3<Scalar>(Scalar(0.2), Scalar(0.5), Scalar(0.1)));
     SO3Type const C2 =
-        SO3Type::exp(Vector3<Scalar>(Scalar(0), Scalar(0), Scalar(kPi / 2)));
+        SO3Type::exp(Vector3<Scalar>(Scalar(0), Scalar(0), Scalar(kPi) / Scalar(2)));
 
     Point const p0 = Point::Zero();
     Point const p1(Scalar(1), Scalar(2), Scalar(3));
@@ -384,12 +384,12 @@ int test_sgal3() {
   cerr << "Double tests: " << endl;
   Tests<double>().runAll();
 
-//   cerr << "Float tests: " << endl;
-//   Tests<float>().runAll();
-//   #if SOPHUS_CERES
-//     cerr << "ceres::Jet<double, 3> tests: " << endl;
-//     Tests<ceres::Jet<double, 3>>().runAll();
-//   #endif
+  cerr << "Float tests: " << endl;
+  Tests<float>().runAll();
+  #if SOPHUS_CERES
+    cerr << "ceres::Jet<double, 3> tests: " << endl;
+    Tests<ceres::Jet<double, 3>>().runAll();
+  #endif
 
   return 0;
 }
