@@ -109,6 +109,34 @@ namespace Sophus
         {
             return g.template segment<1>(9);
         }
+        /**
+         * 
+         */
+        static inline std::vector<int> get_tangent_dims_translation()
+        {
+            return {0,1,2};
+        }
+        /**
+         * 
+         */
+        static inline std::vector<int> get_tangent_dims_boost()
+        {
+            return {3,4,5};
+        }
+        /**
+         * 
+         */
+        static inline std::vector<int> get_tangent_dims_rotation()
+        {
+            return {6,7,8};
+        }
+        /**
+         * 
+         */
+        static inline std::vector<int> get_tangent_dims_time()
+        {
+            return {9};
+        }
     };
 
 
