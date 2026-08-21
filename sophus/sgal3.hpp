@@ -77,7 +77,25 @@ namespace Sophus
          * 
          */
         template<typename Scalar>
-        static inline const Eigen::Matrix<Scalar, 3, 1> rho(
+        static inline typename SGal3<Scalar>::TangentVector create(
+            Vector3<Scalar> rho,
+            Vector3<Scalar> nu,
+            Vector3<Scalar> theta,
+            Vector1<Scalar> tau)
+        {
+            typename SGal3<Scalar>::TangentVector g;
+            g.template segment<3>(0) = rho;
+            g.template segment<3>(3) = nu;
+            g.template segment<3>(6) = theta;
+            g[9] = tau[0];
+            //
+            return g;
+        }
+        /**
+         * 
+         */
+        template<typename Scalar>
+        static inline const Matrix<Scalar, 3, 1> rho(
             const typename SGal3<Scalar>::TangentVector& g)
         {
             return g.template segment<3>(0);
@@ -86,7 +104,7 @@ namespace Sophus
          * 
          */
         template<typename Scalar>
-        static inline const Eigen::Matrix<Scalar, 3, 1> nu(
+        static inline const Matrix<Scalar, 3, 1> nu(
             const typename SGal3<Scalar>::TangentVector& g)
         {
             return g.template segment<3>(3);
@@ -95,7 +113,7 @@ namespace Sophus
          * 
          */
         template<typename Scalar>
-        static inline const Eigen::Matrix<Scalar, 3, 1> theta(
+        static inline const Matrix<Scalar, 3, 1> theta(
             const typename SGal3<Scalar>::TangentVector& g)
         {
             return g.template segment<3>(6);
@@ -104,7 +122,7 @@ namespace Sophus
          * 
          */
         template<typename Scalar>
-        static inline const Eigen::Matrix<Scalar, 1, 1> iota(
+        static inline const Matrix<Scalar, 1, 1> iota(
             const typename SGal3<Scalar>::TangentVector& g)
         {
             return g.template segment<1>(9);
@@ -471,7 +489,7 @@ namespace Sophus
             }
         }
         /**
-         * @brief Compute the left jacobian for boost element.
+         * @brief Compute the SO3 jacobian for boost element.
          */
         static Matrix3<Scalar> boostJacobianN(
             const Vector3<Scalar>& omega) {
