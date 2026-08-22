@@ -584,6 +584,16 @@ namespace Sophus
             //
             return g;
         }
+        /**
+         * @brief Returns copy of instance casted to NewScalarType.
+         */
+        template <class NewScalarType>
+        SGal3<NewScalarType> cast() const {
+            return SGal3<NewScalarType>(rotation().template cast<NewScalarType>(),
+                                        translation().template cast<NewScalarType>(),
+                                        boost().template cast<NewScalarType>(),
+                                        timestamp().template cast<NewScalarType>());
+        }
         //
         protected:
         //
